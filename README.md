@@ -5,13 +5,13 @@
 
 ### Build example:
 ```
-docker image build -t kernel528/postgres:10 -f 10/Dockerfile .
+docker image build -t kernel528/postgres:10.6 -f 10.6/Dockerfile .
 
 ```
 
 ### Runtime example:
 ```
-docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:10
+docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:10.6
 ```
 
 # testing example:
