@@ -31,7 +31,7 @@ docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=passwo
   * exterior to the container
     If you have psql installed locally, or in a different container
     ```
-    psql -h 0.0.0.0 -U postgres
+    docker container run -it --rm --name psql-client --hostname psql-clien kernel528/postgres:10.6 psql -h 192.168.1.110 -U postgres
     <password>
     select VERSION();
     \q           
