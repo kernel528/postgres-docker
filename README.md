@@ -1,3 +1,4 @@
+[![Build Status](http://drone.kernelsanders.biz/api/badges/kernel528/postgres-docker/status.svg)](http://drone.kernelsanders.biz/kernel528/postgres-docker)
 # Postgres docker image
 * base image for non-managed services postgres docker containers
 * Intent is to maintain current version -1 versions of the database software.
