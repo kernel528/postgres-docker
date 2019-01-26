@@ -10,6 +10,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     dockerfile: 10.6/Dockerfile
     tag:
+      - latest
       - 10.6
       - 10.6-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
 
