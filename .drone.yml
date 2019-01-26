@@ -1,7 +1,7 @@
 pipeline:
 
 # Build Postgresql 10.x image
-  docker-publish-postgresql10-dev:
+  docker-publish-postgres:
     when:
       branch: 10.6
       event: push
@@ -12,6 +12,17 @@ pipeline:
     tag:
       - 10.6
       - 10.6-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
+
+# Report version when merged into master
+  docker-postgres-version:
+    when:
+      branch: master
+      event: push
+    image: kernel528/postgres:latest
+    secrets: [ docker_username, docker_password ]
+    commands:
+      - "cat /etc/alpine-release"
+      - "postgres --version"
 
 # Post notification to slack channel
   slack:
