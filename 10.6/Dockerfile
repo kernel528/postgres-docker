@@ -1,5 +1,5 @@
 # vim:set ft=dockerfile:
-FROM kernel528/alpine:3.8.2
+FROM kernel528/alpine:3.9.0
 
 label MAINTAINER=kernel528@gmail.com
 
