@@ -3,16 +3,16 @@ pipeline:
 # Build Postgresql 10.x image
   docker-publish-postgres:
     when:
-      branch: 10.6
+      branch: 10.7
       event: push
     image: plugins/docker:latest
     repo: kernel528/postgres
     secrets: [ docker_username, docker_password ]
-    dockerfile: 10.6/Dockerfile
+    dockerfile: 10.7/Dockerfile
     tag:
       - latest
-      - 10.6
-      - 10.6-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
+      - 10.7
+      - 10.7-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
 
 # Report version when merged into master
   docker-postgres-version:

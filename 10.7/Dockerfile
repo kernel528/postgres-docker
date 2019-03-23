@@ -1,5 +1,5 @@
 # vim:set ft=dockerfile:
-FROM kernel528/alpine:3.9.0
+FROM kernel528/alpine:3.9.2
 
 label MAINTAINER=kernel528@gmail.com
 
@@ -27,10 +27,10 @@ RUN apk add --no-cache perl-utils
 RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PGPORT 5432
-ENV PG_MAJOR 10.6
+ENV PG_MAJOR 10.7
 
-ENV PG_VERSION 10.6
-ENV PG_SHA256 68a8276f08bda8fbefe562faaf8831cb20664a7a1d3ffdbbcc5b83e08637624b
+ENV PG_VERSION 10.7
+ENV PG_SHA256 bfed1065380c1bba927bfe51f23168471373f26e3324cbad859269cc32733ede
 
 RUN set -ex \
     \
@@ -149,7 +149,7 @@ ENV PGDATA /var/lib/postgresql/data
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" # this 777 will be replaced by 700 at runtime (allows semi-arbitrary "--user" values)
 VOLUME /var/lib/postgresql/data
 
-COPY 10.6/docker-entrypoint.sh /usr/local/bin/
+COPY 10.7/docker-entrypoint.sh /usr/local/bin/
 
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]

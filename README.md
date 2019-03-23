@@ -3,6 +3,7 @@
 * base image for non-managed services postgres docker containers
 * Intent is to maintain current version -1 versions of the database software.
 * Maintenance scripts are still under development, and will be found in /scripts folder
+* Based on:  
 
 ### Build example:
 ```
