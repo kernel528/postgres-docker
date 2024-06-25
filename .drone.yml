@@ -1,41 +1,45 @@
-pipeline:
+kind: pipeline
+type: docker
+name: default
 
-# Build Postgresql 10.x image
-  docker-publish-postgres:
-    when:
-      branch: 10.7
-      event: push
-    image: plugins/docker:latest
-    repo: kernel528/postgres
-    secrets: [ docker_username, docker_password ]
-    dockerfile: Dockerfile
-    tag:
-      - latest
-      - 10.7
-      - 10.7-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
+trigger:
+  branch:
+    - '15'
+    - main
+  event:
+    - custom
+    - push
+    - pull_request
 
-# Report version when merged into master
-  docker-postgres-version:
+steps:
+  - name: docker-build
+    image: plugins/docker
     when:
-      branch: master
-      event: push
+      branch:
+        - '15'
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: kernel528/postgres
+      tags:
+        - latest
+        - '15'
+        - '15.7'
+  - name: docker-test
     image: kernel528/postgres:latest
-    secrets: [ docker_username, docker_password ]
+    when:
+      branch:
+        - main
     commands:
-      - "cat /etc/alpine-release"
-      - "postgres --version"
-
-# Post notification to slack channel
-  slack:
+      - cat /etc/alpine-release
+      - uname -a
+  - name: notify
+    image: plugins/slack
+    settings:
+      webhook: https://hooks.slack.com/services/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
     when:
       status:
-        - success
         - failure
-      event:
-        - push
-        - tag
-    image: plugins/slack
-    channel: orpheus-alerts
-    webhook: https://hooks.slack.com/services/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
-    template: >
-      Drone build {{uppercase build.status}} for {{ build.link }} with git commit {{ truncate build.commit 8 }} to git branch ({{ build.branch }}) by {{ build.author }}.
+        - success

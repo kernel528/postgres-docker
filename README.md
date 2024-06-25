@@ -7,7 +7,7 @@
 
 ### Build example:
 ```
-docker image build -t kernel528/postgres:10.6 -f 10.6/Dockerfile .
+docker image build -t kernel528/postgres:15 -f 15/Dockerfile .
 
 ```
 
