@@ -35,6 +35,7 @@ steps:
     commands:
       - cat /etc/alpine-release
       - uname -a
+      - postgres -V
   - name: notify
     image: plugins/slack
     settings:
