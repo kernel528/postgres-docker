@@ -1,9 +1,6 @@
 [![Build Status](http://drone.kernelsanders.biz/api/badges/kernel528/postgres-docker/status.svg)](http://drone.kernelsanders.biz/kernel528/postgres-docker)
 # Postgres docker image
-* base image for non-managed services postgres docker containers
-* Intent is to maintain current version -1 versions of the database software.
-* Maintenance scripts are still under development, and will be found in /scripts folder
-* Based on:  
+* Based on:  https://github.com/docker-library/postgres/blob/cc305ee1c59d93ac1808108edda6556b879374a4/10/alpine/Dockerfile
 
 ### Build example:
 ```
@@ -38,6 +35,5 @@ docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=passwo
     select VERSION();
     \q           
     ```
-  * Either way, you should see a report of the currently installed version of postgres.
 # source links
 * https://www.postgresql.org/download/
