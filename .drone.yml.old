@@ -1,0 +1,41 @@
+pipeline:
+
+# Build Postgresql 15.x image
+  docker-publish-postgres:
+    when:
+      branch: 15
+      event: push
+    image: plugins/docker:latest
+    repo: kernel528/postgres
+    secrets: [ docker_username, docker_password ]
+    dockerfile: Dockerfile
+    tag:
+      - latest
+      - 15
+      - 15-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
+
+# Report version when merged into master
+  docker-postgres-version:
+    when:
+      branch: main
+      event: push
+    image: kernel528/postgres:latest
+    secrets: [ docker_username, docker_password ]
+    commands:
+      - "cat /etc/alpine-release"
+      - "postgres --version"
+
+# Post notification to slack channel
+  slack:
+    when:
+      status:
+        - success
+        - failure
+      event:
+        - push
+        - tag
+    image: plugins/slack
+    channel: orpheus-alerts
+    webhook: https://hooks.slack.com/services/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
+    template: >
+      Drone build {{uppercase build.status}} for {{ build.link }} with git commit {{ truncate build.commit 8 }} to git branch ({{ build.branch }}) by {{ build.author }}.
