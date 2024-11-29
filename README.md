@@ -1,4 +1,5 @@
-[![Build Status](http://drone.kernelsanders.biz/api/badges/kernel528/postgres-docker/status.svg)](http://drone.kernelsanders.biz/kernel528/postgres-docker)
+[![Build Status](http://drone.kernelsanders.biz:8080/api/badges/kernel528/postgres-docker/status.svg?ref=refs/heads/main)](http://drone.kernelsanders.biz:8080/kernel528/postgres-docker)
+
 # Postgres docker image
 * Based on:  https://github.com/docker-library/postgres/blob/cc305ee1c59d93ac1808108edda6556b879374a4/10/alpine/Dockerfile
 
