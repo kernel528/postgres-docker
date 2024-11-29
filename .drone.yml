@@ -12,6 +12,7 @@ trigger:
     - pull_request
 
 steps:
+  # Build docker image
   - name: docker-build
     image: plugins/docker
     when:
@@ -33,6 +34,7 @@ steps:
     when:
       branch:
         - main
+        - '16'
     commands:
       - cat /etc/alpine-release
       - uname -a
@@ -40,7 +42,9 @@ steps:
   - name: notify
     image: plugins/slack
     settings:
-      webhook: https://hooks.slack.com/services/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
+      webhook: https://hooks.slack.com/services/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
+    # template: >
+    #  Drone build {{uppercase build.status}} for {{ build.link }} with git commit {{ truncate build.commit 8 }} to git branch ({{ build.branch }}) by {{ build.author }}.
     when:
       status:
         - failure
