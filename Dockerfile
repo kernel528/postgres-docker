@@ -9,7 +9,6 @@ RUN set -eux; \
 # also create the postgres user's home directory with appropriate permissions
 # see https://github.com/docker-library/postgres/issues/274
 	install --verbose --directory --owner postgres --group postgres --mode 1777 /var/lib/postgresql
-
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 ENV GOSU_VERSION 1.17

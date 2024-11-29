@@ -12,7 +12,6 @@ trigger:
     - pull_request
 
 steps:
-
   # Build docker image
   - name: docker-build
     image: plugins/docker
