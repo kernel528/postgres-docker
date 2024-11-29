@@ -28,7 +28,6 @@ steps:
         - latest
         - '16'
         - '16.6'
-        - 16.6-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
   - name: docker-test
     image: kernel528/postgres:latest
     when:
