@@ -1,5 +1,6 @@
-# vim:set ft=dockerfile:
 FROM kernel528/alpine:3.20.3
+
+# Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.20/Dockerfile
 
 # 70 is the standard uid/gid for "postgres" in Alpine
 # https://git.alpinelinux.org/aports/tree/main/postgresql/postgresql.pre-install?h=3.12-stable
@@ -9,6 +10,7 @@ RUN set -eux; \
 # also create the postgres user's home directory with appropriate permissions
 # see https://github.com/docker-library/postgres/issues/274
 	install --verbose --directory --owner postgres --group postgres --mode 1777 /var/lib/postgresql
+
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
 ENV GOSU_VERSION 1.17

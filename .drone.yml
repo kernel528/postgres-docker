@@ -26,12 +26,9 @@ steps:
       repo: kernel528/postgres
       tags:
         - latest
-        - 16
-        - 16.6
-        - 16.6-alpine-3.20.3
+        - '16'
+        - '16.6'
         - 16.6-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
-
-  # Run docker test
   - name: docker-test
     image: kernel528/postgres:latest
     when:
@@ -39,10 +36,9 @@ steps:
         - main
         - '16'
     commands:
-      - "cat /etc/alpine-release"
-      - "postgres --version"
-
-  # Post slack notification
+      - cat /etc/alpine-release
+      - uname -a
+      - postgres --version
   - name: notify
     image: plugins/slack
     settings:
