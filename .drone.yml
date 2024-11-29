@@ -4,7 +4,7 @@ name: default
 
 trigger:
   branch:
-    - '15'
+    - '16'
     - main
   event:
     - custom
@@ -12,11 +12,12 @@ trigger:
     - pull_request
 
 steps:
+  # Build docker image
   - name: docker-build
     image: plugins/docker
     when:
       branch:
-        - '15'
+        - '16'
     settings:
       username:
         from_secret: docker_username
@@ -25,21 +26,29 @@ steps:
       repo: kernel528/postgres
       tags:
         - latest
-        - '15'
-        - '15.7'
+        - 16
+        - 16.6
+        - 16.6-alpine-3.20.3
+        - 16.6-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
+
+  # Run docker test
   - name: docker-test
     image: kernel528/postgres:latest
     when:
       branch:
         - main
+        - '16'
     commands:
-      - cat /etc/alpine-release
-      - uname -a
-      - postgres -V
+      - "cat /etc/alpine-release"
+      - "postgres --version"
+
+  # Post slack notification
   - name: notify
     image: plugins/slack
     settings:
-      webhook: https://hooks.slack.com/services/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
+      webhook: https://hooks.slack.com/services/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
+    # template: >
+    #  Drone build {{uppercase build.status}} for {{ build.link }} with git commit {{ truncate build.commit 8 }} to git branch ({{ build.branch }}) by {{ build.author }}.
     when:
       status:
         - failure
