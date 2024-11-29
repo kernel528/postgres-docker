@@ -4,7 +4,7 @@ name: default
 
 trigger:
   branch:
-    - '15'
+    - '16'
     - main
   event:
     - custom
@@ -16,7 +16,7 @@ steps:
     image: plugins/docker
     when:
       branch:
-        - '15'
+        - '16'
     settings:
       username:
         from_secret: docker_username
@@ -25,8 +25,9 @@ steps:
       repo: kernel528/postgres
       tags:
         - latest
-        - '15'
-        - '15.7'
+        - '16'
+        - '16.6'
+        - 16.6-${DRONE_COMMIT:0:8}-drone-build-${DRONE_BUILD_NUMBER}
   - name: docker-test
     image: kernel528/postgres:latest
     when:
@@ -35,6 +36,7 @@ steps:
     commands:
       - cat /etc/alpine-release
       - uname -a
+      - postgres --version
   - name: notify
     image: plugins/slack
     settings:
