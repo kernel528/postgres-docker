@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: default
+name: postgres-image-build
 
 trigger:
   branch:
@@ -28,6 +28,8 @@ steps:
         - latest
         - '16'
         - '16.6'
+
+  # Test docker image
   - name: docker-test
     image: kernel528/postgres:latest
     when:
@@ -38,12 +40,13 @@ steps:
       - cat /etc/alpine-release
       - uname -a
       - postgres --version
+
+  # Post slack notification
   - name: notify
     image: plugins/slack
     settings:
-      webhook: https://hooks.slack.com/services/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
-    # template: >
-    #  Drone build {{uppercase build.status}} for {{ build.link }} with git commit {{ truncate build.commit 8 }} to git branch ({{ build.branch }}) by {{ build.author }}.
+      webhook:
+        from_secret: slack_webhook
     when:
       status:
         - failure
