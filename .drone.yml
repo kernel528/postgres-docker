@@ -46,7 +46,7 @@ steps:
     image: plugins/slack
     settings:
       webhook:
-        from_secret: slack_webhook
+        from_secret: slack_webhook_drone_alerts
     when:
       status:
         - failure
