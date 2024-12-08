@@ -12,12 +12,15 @@ trigger:
     - pull_request
 
 steps:
+
   # Build docker image
   - name: docker-build
     image: plugins/docker
     when:
       branch:
         - '16'
+      event:
+        - push
     settings:
       username:
         from_secret: docker_username
@@ -35,7 +38,8 @@ steps:
     when:
       branch:
         - main
-        - '16'
+      event:
+        - push
     commands:
       - cat /etc/alpine-release
       - uname -a

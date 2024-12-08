@@ -10,3 +10,4 @@
 * v4.0.1:  Testing GITHUB secret
 * v4.0.2:  Testing GITHUB secret again...
 * v4.0.3:  Testing GITHUB repo webhook, re-enabled from drone.
+* v4.0.4:  Updated .drone.yml to only run docker test for main branch merges.
