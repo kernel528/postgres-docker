@@ -9,6 +9,7 @@ trigger:
     - push
 
 steps:
+  # Build the docker image for the major version
   - name: v16-docker-image-build
     image: plugins/docker
     settings:
@@ -21,6 +22,17 @@ steps:
         - '16'
         - '16.6'
 
+  # Slack notification
+  - name: slack-notification
+    image: plugins/slack
+    when:
+      status:
+        - failure
+        - success
+    settings:
+      webhook:
+        from_secret: slack_webhook_drone_alerts
+
 ---
 
 kind: pipeline
@@ -28,11 +40,10 @@ type: docker
 name: main
 
 trigger:
+  event:
+    - push
   branch:
     - main
-  event:
-    - tag
-    - push
 
 steps:
   - name: main-docker-image-build
@@ -63,14 +74,7 @@ steps:
       - uname -a
       - postgres --version
 
----
-
-kind: pipeline
-type: docker
-name: slack-notification
-
-steps:
-  # Post slack notification
+  # Slack notification
   - name: slack-notification
     image: plugins/slack
     when:
