@@ -21,6 +21,7 @@ steps:
       tags:
         - '16'
         - '16.6'
+        - '16-drone-build-${DRONE_BUILD_NUMBER}'
         - latest
 
   # Slack notification
