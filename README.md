@@ -1,9 +1,11 @@
 [![Build Status](http://drone.kernelsanders.biz:8080/api/badges/kernel528/postgres-docker/status.svg?ref=refs/heads/main)](http://drone.kernelsanders.biz:8080/kernel528/postgres-docker)
 [![Latest Version](https://img.shields.io/github/v/tag/kernel528/postgres-docker)](https://github.com/kernel528/postgres-docker/releases/latest)
-
+[![Docker Pulls](https://img.shields.io/docker/pulls/kernel528/postgres)](https://hub.docker.com/r/kernel528/postgres)
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/kernel528/postgres)](https://hub.docker.com/r/kernel528/postgres)
+[![Docker Image Version (latest by date)](https://img.shields.io/docker/v/kernel528/postgres)](https://hub.docker.com/r/kernel528/postgres)
 
 # Postgres docker image
-* Based on:  https://github.com/docker-library/postgres/blob/cc305ee1c59d93ac1808108edda6556b879374a4/10/alpine/Dockerfile
+* Based on:  [Postgres Official Docker - Alpine](https://github.com/docker-library/postgres/tree/master/16/alpine3.20)
 
 ### Build example:
 ```
