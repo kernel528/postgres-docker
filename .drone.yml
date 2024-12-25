@@ -43,6 +43,7 @@ name: main
 trigger:
   event:
     - push
+    - tag
   branch:
     - main
 
