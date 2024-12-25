@@ -6,7 +6,7 @@ trigger:
   branch:
     - '16'
   event:
-    - push
+    - pull_request
 
 steps:
   # Build the docker image for the major version
