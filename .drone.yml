@@ -8,8 +8,8 @@ trigger:
   event:
     - pull_request
 
+# Build the docker image for the major version branch
 steps:
-  # Build the docker image for the major version
   - name: v16-docker-image-build
     image: plugins/docker
     settings:
@@ -48,6 +48,7 @@ trigger:
   branch:
     - main
 
+# Build the docker image for the main branch & tagged release
 steps:
   - name: main-docker-image-build
     image: plugins/docker
