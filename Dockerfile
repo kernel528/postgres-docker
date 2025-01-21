@@ -2,6 +2,9 @@ FROM kernel528/alpine:3.21.2
 
 # Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.20/Dockerfile
 
+# Set to root user to install packages
+USER root
+
 # 70 is the standard uid/gid for "postgres" in Alpine
 # https://git.alpinelinux.org/aports/tree/main/postgresql/postgresql.pre-install?h=3.12-stable
 RUN set -eux; \
