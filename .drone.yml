@@ -4,7 +4,8 @@ name: version-16
 
 trigger:
   branch:
-    - '16'
+    - '16-arm64'
+    - 'main-arm64'
   event:
     - pull_request
 
@@ -53,6 +54,8 @@ steps:
   - name: main-docker-image-build
     image: plugins/docker
     when:
+      branch:
+        - '16-arm64'
       event:
         - tag
     settings:
@@ -62,6 +65,13 @@ steps:
         from_secret: docker_password
       repo: kernel528/postgres
       tags:
+        - latest-arm64
+        - '16-arm64'
+        - '16.6-arm64'
+
+  # Test docker image
+  - name: docker-test
+    image: kernel528/postgres:latest-arm64
         - ${DRONE_TAG}
 
   # Test docker image
@@ -69,7 +79,7 @@ steps:
     image: kernel528/postgres:latest
     when:
       branch:
-        - main
+        - main-arm64
       event:
         - push
     commands:
