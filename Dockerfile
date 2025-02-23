@@ -6,7 +6,7 @@ FROM kernel528/alpine:3.21.2
 USER root
 
 # 70 is the standard uid/gid for "postgres" in Alpine
-# https://git.alpinelinux.org/aports/tree/main/postgresql/postgresql.pre-install?h=3.12-stable
+# https://git.alpinelinux.org/aports/tree/main/postgresql-common/postgresql-common.pre-install?h=3.21-stable
 RUN set -eux; \
 	addgroup -g 70 -S postgres; \
 	adduser -u 70 -S -D -G postgres -H -h /var/lib/postgresql -s /bin/sh postgres; \
@@ -52,8 +52,8 @@ ENV LANG en_US.utf8
 RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PG_MAJOR 16
-ENV PG_VERSION 16.6
-ENV PG_SHA256 23369cdaccd45270ac5dcc30fa9da205d5be33fa505e1f17a0418d2caeca477b
+ENV PG_VERSION 16.8
+ENV PG_SHA256 9468083a56ce0ee7d294601b74dad3dd9fc69d87aff61f0a9fb63c813ff7efd8
 
 ENV DOCKER_PG_LLVM_DEPS \
 		llvm19-dev \
