@@ -13,3 +13,4 @@
 * v4.0.4:  Updated .drone.yml to only run docker test for main branch merges.
 * v4.1.0:  Update to kernel528/alpine:3.21.2 base image.
 * v4.2.0:  Updated Dockerfile to match upstream alpine-3.21 updates.  Increments postgres to v16.8.
+* v4.2.1:  Updated to alpine-3.21.3. 
