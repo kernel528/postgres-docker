@@ -45,6 +45,10 @@ steps:
         - '16.8-arm64'
         - '16.8-arm64-drone-build-${DRONE_BUILD_NUMBER}'
         - 'latest-arm64'
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      use_buildx: true
 
   # Test docker image
   - name: docker-test
