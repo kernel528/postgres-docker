@@ -12,6 +12,18 @@ trigger:
     - pull_request
 
 steps:
+  - name: setup-qemu
+    image: tonistiigi/binfmt
+    privileged: true
+    commands:
+      - /bin/sh -c "echo 'Setting up QEMU for cross-platform builds'"
+
+  - name: setup-buildx
+    image: docker:24.0.2
+    privileged: true
+    commands:
+      - docker buildx create --use
+      - docker buildx inspect --bootstrap
 
   # Build docker image
   - name: docker-build
@@ -28,9 +40,11 @@ steps:
         from_secret: docker_password
       repo: kernel528/postgres
       tags:
-        - latest-arm64
         - '16-arm64'
-        - '16.6-arm64'
+        - '16-arm64-drone-build-${DRONE_BUILD_NUMBER}'
+        - '16.8-arm64'
+        - '16.8-arm64-drone-build-${DRONE_BUILD_NUMBER}'
+        - 'latest-arm64'
 
   # Test docker image
   - name: docker-test
