@@ -4,8 +4,8 @@ name: postgres-image-build
 
 trigger:
   branch:
-    - '16'
-    - main
+    - '16-arm64'
+    - 'main-arm64'
   event:
     - custom
     - push
@@ -18,7 +18,7 @@ steps:
     image: plugins/docker
     when:
       branch:
-        - '16'
+        - '16-arm64'
       event:
         - push
     settings:
@@ -28,16 +28,16 @@ steps:
         from_secret: docker_password
       repo: kernel528/postgres
       tags:
-        - latest
-        - '16'
-        - '16.6'
+        - latest-arm64
+        - '16-arm64'
+        - '16.6-arm64'
 
   # Test docker image
   - name: docker-test
-    image: kernel528/postgres:latest
+    image: kernel528/postgres:latest-arm64
     when:
       branch:
-        - main
+        - main-arm64
       event:
         - push
     commands:
