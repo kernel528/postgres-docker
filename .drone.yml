@@ -1,26 +1,63 @@
 kind: pipeline
 type: docker
-name: postgres-image-build
+name: version-16
 
 trigger:
   branch:
     - '16-arm64'
     - 'main-arm64'
   event:
-    - custom
-    - push
     - pull_request
 
+# Build the docker image for the major version branch
 steps:
+  - name: v16-docker-image-build
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: kernel528/postgres
+      tags:
+        - '16'
+        - '16.6'
+        - '16-drone-build-${DRONE_BUILD_NUMBER}'
+        - latest
 
-  # Build docker image
-  - name: docker-build
+  # Slack notification
+  - name: slack-notification
+    image: plugins/slack
+    when:
+      status:
+        - failure
+        - success
+    settings:
+      webhook:
+        from_secret: slack_webhook_drone_alerts
+
+---
+
+kind: pipeline
+type: docker
+name: main
+
+trigger:
+  event:
+    - push
+    - tag
+  branch:
+    - main
+
+# Build the docker image for the main branch & tagged release
+steps:
+  - name: main-docker-image-build
     image: plugins/docker
     when:
       branch:
         - '16-arm64'
       event:
-        - push
+        - tag
     settings:
       username:
         from_secret: docker_username
@@ -35,6 +72,11 @@ steps:
   # Test docker image
   - name: docker-test
     image: kernel528/postgres:latest-arm64
+        - ${DRONE_TAG}
+
+  # Test docker image
+  - name: latest-docker-test
+    image: kernel528/postgres:latest
     when:
       branch:
         - main-arm64
@@ -45,13 +87,13 @@ steps:
       - uname -a
       - postgres --version
 
-  # Post slack notification
-  - name: notify
+  # Slack notification
+  - name: slack-notification
     image: plugins/slack
-    settings:
-      webhook:
-        from_secret: slack_webhook_drone_alerts
     when:
       status:
         - failure
         - success
+    settings:
+      webhook:
+        from_secret: slack_webhook_drone_alerts
