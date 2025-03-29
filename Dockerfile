@@ -1,6 +1,6 @@
 FROM kernel528/alpine:3.21.3
 
-# Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.20/Dockerfile
+# Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.21/Dockerfile
 
 # Set to root user to install packages
 USER root

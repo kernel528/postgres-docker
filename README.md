@@ -5,7 +5,7 @@
 [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/kernel528/postgres)](https://hub.docker.com/r/kernel528/postgres)
 
 # Postgres docker image
-* Based on:  [Postgres Official Docker - Alpine](https://github.com/docker-library/postgres/tree/master/16/alpine3.20)
+* Based on:  [Postgres Official Docker - Alpine](https://github.com/docker-library/postgres)
 
 ### Build example:
 ```
