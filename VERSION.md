@@ -15,3 +15,4 @@
 * v4.2.0:  Updated Dockerfile to match upstream alpine-3.21 updates.  Increments postgres to v16.8.
 * v4.2.1:  Updated to alpine-3.21.3. 
 * v4.2.2:  Updated to latest kernel528/alpine:3.21.3 tag release.
+* v16.8.0: Updated version to match latest tagged release. 
