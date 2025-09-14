@@ -16,7 +16,7 @@ RUN set -eux; \
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
-ENV GOSU_VERSION 1.17
+ENV GOSU_VERSION 1.18
 RUN set -eux; \
 	\
 	apk add --no-cache --virtual .gosu-deps \
@@ -52,8 +52,8 @@ ENV LANG en_US.utf8
 RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PG_MAJOR 16
-ENV PG_VERSION 16.9
-ENV PG_SHA256 07c00fb824df0a0c295f249f44691b86e3266753b380c96f633c3311e10bd005
+ENV PG_VERSION 16.10
+ENV PG_SHA256 de8485f4ce9c32e3ddfeef0b7c261eed1cecb54c9bcd170e437ff454cb292b42
 
 ENV DOCKER_PG_LLVM_DEPS \
 		llvm19-dev \

@@ -18,3 +18,4 @@
 * v16.8.0: Updated version to match latest tagged release. 
 * v16.9.0-250614: Updated to postgres v16.9 and using kernel528/alpine:3.22.0
 * v16.9.0-250725: Updated to postgres v16.9 using kernel528/alpine:3.22.1
+* v16.10.0 Updated version to postgres v16.10 using kernel528/alpine:3.22.1.09
