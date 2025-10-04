@@ -10,7 +10,7 @@ trigger:
 
 # Build the docker image for the major version branch
 steps:
-  - name: v16-docker-image-build
+  - name: v17-docker-image-build
     image: plugins/docker
     settings:
       username:
