@@ -1,10 +1,10 @@
 kind: pipeline
 type: docker
-name: version-16
+name: version-17
 
 trigger:
   branch:
-    - '16'
+    - '17'
   event:
     - pull_request
 
@@ -19,10 +19,10 @@ steps:
         from_secret: docker_password
       repo: kernel528/postgres
       tags:
-        - '16'
-        - '16.10.0-251004'
-        - '16-drone-build-${DRONE_BUILD_NUMBER}'
-        - '16.10.0-251004-drone-build-${DRONE_BUILD_NUMBER}'
+        - '17'
+        - '17.6'
+        - '17-drone-build-${DRONE_BUILD_NUMBER}'
+        - '17.6-drone-build-${DRONE_BUILD_NUMBER}'
         - latest
 
   # Slack notification
