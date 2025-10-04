@@ -43,7 +43,6 @@ RUN set -eux; \
 # verify that the binary works
 	gosu --version; \
 	gosu nobody true
-RUN set -eux; ln -svf gosu /usr/local/bin/su-exec; su-exec nobody true # backwards compatibility (removed in PostgreSQL 17+)
 
 # make the "en_US.UTF-8" locale so postgres will be utf-8 enabled by default
 # alpine doesn't require explicit locale-file generation
@@ -51,9 +50,9 @@ ENV LANG en_US.utf8
 
 RUN mkdir /docker-entrypoint-initdb.d
 
-ENV PG_MAJOR 16
-ENV PG_VERSION 16.10
-ENV PG_SHA256 de8485f4ce9c32e3ddfeef0b7c261eed1cecb54c9bcd170e437ff454cb292b42
+ENV PG_MAJOR 17
+ENV PG_VERSION 17.6
+ENV PG_SHA256 e0630a3600aea27511715563259ec2111cd5f4353a4b040e0be827f94cd7a8b0
 
 ENV DOCKER_PG_LLVM_DEPS \
 		llvm19-dev \
@@ -125,7 +124,6 @@ RUN set -eux; \
 # "/usr/src/postgresql/src/backend/access/common/tupconvert.c:105: undefined reference to `libintl_gettext'"
 #		--enable-nls \
 		--enable-integer-datetimes \
-		--enable-thread-safety \
 		--enable-tap-tests \
 # skip debugging info -- we want tiny size instead
 #		--enable-debug \
