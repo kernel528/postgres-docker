@@ -1,16 +1,16 @@
 kind: pipeline
 type: docker
-name: version-18
+name: version-16
 
 trigger:
   branch:
-    - '18'
+    - '16'
   event:
     - pull_request
 
 # Build the docker image for the major version branch
 steps:
-  - name: v18-docker-image-build
+  - name: v16-docker-image-build
     image: plugins/docker
     settings:
       username:
