@@ -43,6 +43,7 @@ RUN set -eux; \
 # verify that the binary works
 	gosu --version; \
 	gosu nobody true
+RUN set -eux; ln -svf gosu /usr/local/bin/su-exec; su-exec nobody true # backwards compatibility (removed in PostgreSQL 17+)
 
 # make the "en_US.UTF-8" locale so postgres will be utf-8 enabled by default
 # alpine doesn't require explicit locale-file generation
@@ -50,9 +51,9 @@ ENV LANG en_US.utf8
 
 RUN mkdir /docker-entrypoint-initdb.d
 
-ENV PG_MAJOR 18
-ENV PG_VERSION 18.0
-ENV PG_SHA256 0d5b903b1e5fe361bca7aa9507519933773eb34266b1357c4e7780fdee6d6078
+ENV PG_MAJOR 16
+ENV PG_VERSION 16.10
+ENV PG_SHA256 de8485f4ce9c32e3ddfeef0b7c261eed1cecb54c9bcd170e437ff454cb292b42
 
 ENV DOCKER_PG_LLVM_DEPS \
 		llvm19-dev \
@@ -101,9 +102,6 @@ RUN set -eux; \
 		lz4-dev \
 # https://www.postgresql.org/docs/15/release-15.html "--with-zstd to enable Zstandard builds"
 		zstd-dev \
-# https://salsa.debian.org/postgresql/postgresql-common/-/commit/89c384273f4c4092483598c292b1b1b188816cce
-# https://www.postgresql.org/docs/18/install-make.html#CONFIGURE-OPTION-WITH-LIBURING
-		liburing-dev \
 	; \
 	\
 	cd /usr/src/postgresql; \
@@ -127,6 +125,7 @@ RUN set -eux; \
 # "/usr/src/postgresql/src/backend/access/common/tupconvert.c:105: undefined reference to `libintl_gettext'"
 #		--enable-nls \
 		--enable-integer-datetimes \
+		--enable-thread-safety \
 		--enable-tap-tests \
 # skip debugging info -- we want tiny size instead
 #		--enable-debug \
@@ -140,7 +139,6 @@ RUN set -eux; \
 		--with-gssapi \
 		--with-icu \
 		--with-ldap \
-		--with-liburing \
 		--with-libxml \
 		--with-libxslt \
 		--with-llvm \
@@ -193,13 +191,10 @@ RUN set -eux; \
 
 RUN install --verbose --directory --owner postgres --group postgres --mode 3777 /var/run/postgresql
 
-#
-# NOTE: in 18+, PGDATA has changed to match the pg_ctlcluster standard directory structure, and the VOLUME has moved from /var/lib/postgresql/data to /var/lib/postgresql
-#
-ENV PGDATA /var/lib/postgresql/18/docker
-RUN ln -svT . /var/lib/postgresql/data # https://github.com/docker-library/postgres/pull/1259#issuecomment-2215477494
-VOLUME /var/lib/postgresql
-# ("/var/lib/postgresql" is already pre-created with suitably usable permissions above)
+ENV PGDATA /var/lib/postgresql/data
+# this 1777 will be replaced by 0700 at runtime (allows semi-arbitrary "--user" values)
+RUN install --verbose --directory --owner postgres --group postgres --mode 1777 "$PGDATA"
+VOLUME /var/lib/postgresql/data
 
 COPY docker-entrypoint.sh docker-ensure-initdb.sh /usr/local/bin/
 RUN ln -sT docker-ensure-initdb.sh /usr/local/bin/docker-enforce-initdb.sh
