@@ -270,9 +270,9 @@ docker_setup_env() {
 				OLD_DATABASES+=( "$d" )
 			fi
 		done
-		if [ "${#OLD_DATABASES[@]}" -eq 0 ] && [ "$PG_MAJOR" -ge 18 ] && mountpoint -q /var/lib/postgresql/data; then
-			OLD_DATABASES+=( '/var/lib/postgresql/data (unused mount/volume)' )
-		fi
+#		if [ "${#OLD_DATABASES[@]}" -eq 0 ] && [ "$PG_MAJOR" -ge 18 ] && mountpoint -q /var/lib/postgresql/data; then
+#			OLD_DATABASES+=( '/var/lib/postgresql/data (unused mount/volume)' )
+#		fi
 	fi
 }
 
