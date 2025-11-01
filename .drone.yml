@@ -19,10 +19,10 @@ steps:
         from_secret: docker_password
       repo: kernel528/postgres
       tags:
-        - '18'
-        - '18.0'
-        - '18-drone-build-${DRONE_BUILD_NUMBER}'
-        - '18.0-drone-build-${DRONE_BUILD_NUMBER}'
+        - '16'
+        - '16.10.0-251101'
+        - '16-drone-build-${DRONE_BUILD_NUMBER}'
+        - '16.10.0-251101-drone-build-${DRONE_BUILD_NUMBER}'
         - latest
 
   # Slack notification
