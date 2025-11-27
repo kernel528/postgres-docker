@@ -21,3 +21,4 @@
 * 16.10.0: Updated version to postgres v16.10 using kernel528/alpine:3.22.1.09
 * 16.10.0-251004: Updated with GOSU to v1.19.
 * 16.10.0-251101: Updated base image to kernel528/alpine:3.22.2
+* 16.11.0-251126: Updated to postgres v16.11 using kernel528/alpine:3.22.2

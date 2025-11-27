@@ -20,9 +20,9 @@ steps:
       repo: kernel528/postgres
       tags:
         - '16'
-        - '16.10.0-251101'
+        - '16.11.0-251126'
         - '16-drone-build-${DRONE_BUILD_NUMBER}'
-        - '16.10.0-251101-drone-build-${DRONE_BUILD_NUMBER}'
+        - '16.11.0-251126-drone-build-${DRONE_BUILD_NUMBER}'
         - latest
 
   # Slack notification
