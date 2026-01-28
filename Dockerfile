@@ -1,4 +1,4 @@
-FROM kernel528/alpine:3.22.1
+FROM kernel528/alpine:3.23.2
 
 # Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.21/Dockerfile
 
@@ -51,8 +51,8 @@ ENV LANG en_US.utf8
 RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PG_MAJOR 18
-ENV PG_VERSION 18.0
-ENV PG_SHA256 0d5b903b1e5fe361bca7aa9507519933773eb34266b1357c4e7780fdee6d6078
+ENV PG_VERSION 18.1
+ENV PG_SHA256 ff86675c336c46e98ac991ebb306d1b67621ece1d06787beaade312c2c915d54
 
 ENV DOCKER_PG_LLVM_DEPS \
 		llvm19-dev \
