@@ -20,9 +20,9 @@ steps:
       repo: kernel528/postgres
       tags:
         - '18'
-        - '18.1.0-260128'
+        - '18.4.0-260710'
         - '18-drone-build-${DRONE_BUILD_NUMBER}'
-        - '18.1.0-260128-drone-build-${DRONE_BUILD_NUMBER}'
+        - '18.4.0-260710-drone-build-${DRONE_BUILD_NUMBER}'
 
   # Slack notification
   - name: slack-notification

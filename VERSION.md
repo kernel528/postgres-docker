@@ -28,3 +28,4 @@ Notes:
 - 16.11.0-251126: Updated to Postgres 16.11 and kernel528/alpine:3.22.2.
 - 16.11.0-260101: Updated base image to kernel528/alpine:3.23.2.
 - 18.1.0-260128: Updated to Postgres 18.1 and kernel528/alpine:3.23.2.
+- 18.4.0-260710: Updated to Postgres 18.4 and kernel528/alpine:3.24.1.
