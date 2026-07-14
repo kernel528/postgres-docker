@@ -11,12 +11,12 @@ Based on: [Postgres Official Docker - Alpine](https://github.com/docker-library/
 
 ## Build
 ```
-docker image build -t kernel528/postgres:18.1.0-260128 -f Dockerfile .
+docker image build -t kernel528/postgres:18.4.0-260710 -f Dockerfile .
 ```
 
 ## Run
 ```
-docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.1.0-260128
+docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.4.0-260710
 ```
 
 ## Configuration
@@ -43,7 +43,7 @@ docker run -it -d \
   -e POSTGRES_PASSWORD=password \
   -v postgres-data:/var/lib/postgresql/data \
   -v "$(pwd)/sample-postgres-db.sql:/docker-entrypoint-initdb.d/01-sample.sql:ro" \
-  kernel528/postgres:18.1.0-260128
+  kernel528/postgres:18.4.0-260710
 ```
 
 ## Tagging
