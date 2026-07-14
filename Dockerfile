@@ -1,4 +1,4 @@
-FROM kernel528/alpine:3.23.2
+FROM kernel528/alpine:3.24.1
 
 # Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.21/Dockerfile
 
@@ -51,12 +51,12 @@ ENV LANG en_US.utf8
 RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PG_MAJOR 18
-ENV PG_VERSION 18.1
-ENV PG_SHA256 ff86675c336c46e98ac991ebb306d1b67621ece1d06787beaade312c2c915d54
+ENV PG_VERSION 18.4
+ENV PG_SHA256 81a81ec695fb0c7901407defaa1d2f7973617154cf27ba74e3a7ab8e64436094
 
 ENV DOCKER_PG_LLVM_DEPS \
-		llvm19-dev \
-		clang19
+		llvm21-dev \
+		clang21
 
 RUN set -eux; \
 	\
@@ -104,6 +104,9 @@ RUN set -eux; \
 # https://salsa.debian.org/postgresql/postgresql-common/-/commit/89c384273f4c4092483598c292b1b1b188816cce
 # https://www.postgresql.org/docs/18/install-make.html#CONFIGURE-OPTION-WITH-LIBURING
 		liburing-dev \
+# https://salsa.debian.org/postgresql/postgresql-common/-/commit/a31ce5b893c11e0f17a016e38c1882fbe1820081
+# https://www.postgresql.org/docs/18/install-make.html#CONFIGURE-OPTION-WITH-LIBCURL
+		curl-dev \
 	; \
 	\
 	cd /usr/src/postgresql; \
@@ -115,9 +118,9 @@ RUN set -eux; \
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	\
 # https://git.alpinelinux.org/aports/tree/community/postgresql15/APKBUILD?h=3.22-stable#n176 ("export LLVM_CONFIG")
-	export LLVM_CONFIG="/usr/lib/llvm19/bin/llvm-config"; \
+	export LLVM_CONFIG="/usr/lib/llvm21/bin/llvm-config"; \
 # https://git.alpinelinux.org/aports/tree/community/postgresql15/APKBUILD?h=3.22-stable#n180 ("older clang versions don't have a 'clang' exe anymore.")
-	export CLANG=clang-19; \
+	export CLANG=clang-21; \
 	\
 # configure options mostly copying Debian:
 # https://salsa.debian.org/postgresql/postgresql-common/-/blob/6e26b5107295170cc8731a3acbf13228ea15941e/server/postgresql.mk#L32
@@ -141,6 +144,7 @@ RUN set -eux; \
 		--with-icu \
 		--with-ldap \
 		--with-liburing \
+		--with-libcurl \
 		--with-libxml \
 		--with-libxslt \
 		--with-llvm \
