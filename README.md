@@ -5,7 +5,7 @@
 [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/kernel528/postgres)](https://hub.docker.com/r/kernel528/postgres)
 
 # Postgres Docker Image
-Small, Alpine-based PostgreSQL image built from the official Docker Library image.
+Small PostgreSQL image built from the official Docker Library Alpine image and the custom `kernel528/alpine` base.
 
 Based on: [Postgres Official Docker - Alpine](https://github.com/docker-library/postgres)
 
@@ -47,9 +47,15 @@ docker run -it -d \
 ```
 
 ## Tagging
-- `16.x` tags track Postgres release versions (for example, `16.11.0`).
+- Major-version tags track PostgreSQL release lines (for example, `18` or `16`).
 - Date suffixes (for example, `16.11.0-260101`) indicate rebuilds or base-image updates for the same Postgres version.
 - `latest` points to the most recently published image.
+
+## Repository Relationships and Refresh Policy
+
+This independent repository is coordinated by [`docker-workspace`](https://github.com/kernel528/docker-workspace), directly consumes [`kernel528/alpine`](https://github.com/kernel528/alpine-docker), and publishes images used by [`docker-swarm`](https://github.com/kernel528/docker-swarm). PostgreSQL has its own application-release cadence, but it must also be rebuilt when the shared Alpine base changes.
+
+Publish and verify the Alpine tag first. Build and validate PostgreSQL with a disposable volume, including initialization, write, clean shutdown, restart, and persistence checks. Publish an immutable PostgreSQL tag before updating `stacks/postgress-stack.yml`. Treat the NFS-backed Swarm rollout as a separate change with a confirmed backup and previous image tag available for rollback.
 
 ## Test
 Once the container is running, there are two ways to test.
