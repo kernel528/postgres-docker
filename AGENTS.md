@@ -10,11 +10,11 @@
 Use the latest tag from `VERSION.md` in examples; update these if the tag changes.
 - Build the image locally:
   ```sh
-  docker image build -t kernel528/postgres:18.4.0-260710 -f Dockerfile .
+  docker image build -t kernel528/postgres:18.4.0-260718 -f Dockerfile .
   ```
 - Run a container:
   ```sh
-  docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password -d kernel528/postgres:18.4.0-260710
+  docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password -d kernel528/postgres:18.4.0-260718
   ```
 - Manual smoke test (inside container):
   ```sh

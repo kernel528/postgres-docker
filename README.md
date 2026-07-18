@@ -11,12 +11,12 @@ Based on: [Postgres Official Docker - Alpine](https://github.com/docker-library/
 
 ## Build
 ```
-docker image build -t kernel528/postgres:18.4.0-260710 -f Dockerfile .
+docker image build -t kernel528/postgres:18.4.0-260718 -f Dockerfile .
 ```
 
 ## Run
 ```
-docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.4.0-260710
+docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.4.0-260718
 ```
 
 ## Configuration
@@ -27,13 +27,13 @@ Common environment variables (aligned with the official Postgres image):
 - `POSTGRES_INITDB_ARGS` (extra `initdb` args)
 - `POSTGRES_INITDB_WALDIR` (optional WAL directory)
 - `POSTGRES_HOST_AUTH_METHOD` (e.g., `md5`, `scram-sha-256`, `trust`)
-- `PGDATA` (default: `/var/lib/postgresql/data`)
+- `PGDATA` (Postgres 18 default: `/var/lib/postgresql/18/docker`)
 
 Initialization scripts:
 - Mount or copy `.sh`, `.sql`, `.sql.gz`, `.sql.xz`, or `.sql.zst` files into `/docker-entrypoint-initdb.d` to run on first startup.
 
 Data persistence:
-- Mount a volume to `/var/lib/postgresql/data` to keep data across container restarts.
+- Mount a volume to `/var/lib/postgresql` to keep Postgres 18 data across container restarts.
 
 ### Example: data volume + init script
 ```
@@ -41,9 +41,9 @@ docker run -it -d \
   --name postgres-local \
   -p 5432:5432 \
   -e POSTGRES_PASSWORD=password \
-  -v postgres-data:/var/lib/postgresql/data \
+  -v postgres-data:/var/lib/postgresql \
   -v "$(pwd)/sample-postgres-db.sql:/docker-entrypoint-initdb.d/01-sample.sql:ro" \
-  kernel528/postgres:18.4.0-260710
+  kernel528/postgres:18.4.0-260718
 ```
 
 ## Tagging
@@ -68,7 +68,7 @@ exit         # container
 ### From another host or container
 If you have `psql` installed locally, or run it from a separate container:
 ```
-docker container run -it --rm --name psql-client --hostname psql-client kernel528/postgres:18.1.0-260128 psql -h 192.168.1.110 -U postgres
+docker container run -it --rm --name psql-client --hostname psql-client kernel528/postgres:18.4.0-260718 psql -h 192.168.1.110 -U postgres
 <password>
 select VERSION();
 \q
