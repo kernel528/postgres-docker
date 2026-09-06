@@ -19,10 +19,8 @@ steps:
         from_secret: docker_password
       repo: kernel528/postgres
       tags:
-        - '18'
-        - '18.4.0-260718'
-        - '18-drone-build-${DRONE_BUILD_NUMBER}'
-        - '18.4.0-260718-drone-build-${DRONE_BUILD_NUMBER}'
+        - 'pr-${DRONE_PULL_REQUEST}-build-${DRONE_BUILD_NUMBER}'
+      dry_run: true
 
   # Slack notification
   - name: slack-notification
@@ -43,10 +41,7 @@ name: main
 
 trigger:
   event:
-    - push
     - tag
-  branch:
-    - main
 
 # Build the docker image for the main branch & tagged release
 steps:
@@ -64,19 +59,6 @@ steps:
       tags:
         - ${DRONE_TAG}
         - latest
-
-  # Test docker image
-  - name: latest-docker-test
-    image: kernel528/postgres:latest
-    when:
-      branch:
-        - main
-      event:
-        - push
-    commands:
-      - cat /etc/alpine-release
-      - uname -a
-      - postgres --version
 
   # Slack notification
   - name: slack-notification
