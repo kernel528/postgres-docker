@@ -11,12 +11,12 @@ Based on: [Postgres Official Docker - Alpine](https://github.com/docker-library/
 
 ## Build
 ```
-docker image build -t kernel528/postgres:18.4.0-260718 -f Dockerfile .
+docker image build -t kernel528/postgres:18.6.0-260907 -f Dockerfile .
 ```
 
 ## Run
 ```
-docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.4.0-260718
+docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.6.0-260907
 ```
 
 ## Configuration
@@ -43,7 +43,7 @@ docker run -it -d \
   -e POSTGRES_PASSWORD=password \
   -v postgres-data:/var/lib/postgresql \
   -v "$(pwd)/sample-postgres-db.sql:/docker-entrypoint-initdb.d/01-sample.sql:ro" \
-  kernel528/postgres:18.4.0-260718
+  kernel528/postgres:18.6.0-260907
 ```
 
 ## Tagging
@@ -74,7 +74,7 @@ exit         # container
 ### From another host or container
 If you have `psql` installed locally, or run it from a separate container:
 ```
-docker container run -it --rm --name psql-client --hostname psql-client kernel528/postgres:18.4.0-260718 psql -h 192.168.1.110 -U postgres
+docker container run -it --rm --name psql-client --hostname psql-client kernel528/postgres:18.6.0-260907 psql -h 192.168.1.110 -U postgres
 <password>
 select VERSION();
 \q

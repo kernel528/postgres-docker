@@ -30,3 +30,4 @@ Notes:
 - 18.1.0-260128: Updated to Postgres 18.1 and kernel528/alpine:3.23.2.
 - 18.4.0-260710: Updated to Postgres 18.4 and kernel528/alpine:3.24.1.
 - 18.4.0-260718: Rebuilt Postgres 18.4 on kernel528/alpine:3.24.1_1.
+- 18.6.0-260907: Updated to Postgres 18.6 on kernel528/alpine:3.24.1_1.
