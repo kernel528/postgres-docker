@@ -1,4 +1,4 @@
-FROM kernel528/alpine:3.24.1_1
+FROM kernel528/alpine:3.24.3_1
 
 # Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.21/Dockerfile
 
@@ -156,9 +156,9 @@ RUN set -eux; \
 		--with-tcl \
 		--with-zstd \
 	; \
-	make -j "$(nproc)" world-bin; \
-	make install-world-bin; \
-	make -C contrib install; \
+	make -s -j "$(nproc)" world-bin; \
+	make -s install-world-bin; \
+	make -s -C contrib install; \
 	\
 	runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
