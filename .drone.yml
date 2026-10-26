@@ -1,30 +1,119 @@
 kind: pipeline
 type: docker
-name: version-18
+name: postgres-rootless-image-validation
+
+node:
+  ci-role: rootless-image-smoke
+  platform: linux-amd64
 
 trigger:
+  repo:
+    - kernel528/postgres-docker
+  branch:
+    - '18'
+    - main
+  event:
+    - pull_request
+    - push
+    - custom
+
+steps:
+  - name: build-and-smoke
+    image: docker:27-cli
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      DOCKER_BUILDKIT: "0"
+    commands:
+      - scripts/ci-rootless-postgres-smoke.sh
+    volumes:
+      - name: podman-socket
+        path: /var/run/docker.sock
+
+volumes:
+  - name: podman-socket
+    host:
+      path: /run/user/1001/podman/podman.sock
+
+---
+
+kind: pipeline
+type: docker
+name: postgres-maintenance-candidate
+
+trigger:
+  repo:
+    - kernel528/postgres-docker
   branch:
     - '18'
   event:
-    - pull_request
+    - push
 
-# Build the docker image for the major version branch
+services:
+  - name: docker
+    image: docker:27.5.1-dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    volumes:
+      - name: candidate-dockersock
+        path: /var/run
+
 steps:
-  - name: v18-docker-image-build
-    image: plugins/docker
-    settings:
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      repo: kernel528/postgres
-      tags:
-        - '18'
-        - '18.6.0-261022'
-        - '18-drone-build-${DRONE_BUILD_NUMBER}'
-        - '18.6.0-261022-drone-build-${DRONE_BUILD_NUMBER}'
+  - name: build-and-smoke-candidate
+    image: docker:27.5.1-cli
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      POSTGRES_IMAGE_REPO: kernel528/postgres
+    volumes:
+      - name: candidate-dockersock
+        path: /var/run
+    commands:
+      - scripts/ci-build-postgres-candidate.sh
 
-  # Slack notification
+  - name: publish-candidate
+    image: docker:27.5.1-cli
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      POSTGRES_IMAGE_REPO: kernel528/postgres
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_PASSWORD:
+        from_secret: docker_password
+    volumes:
+      - name: candidate-dockersock
+        path: /var/run
+    commands:
+      - scripts/ci-publish-postgres-candidate.sh
+
+  - name: slack-notification
+    image: plugins/slack
+    when:
+      status:
+        - failure
+        - success
+    settings:
+      webhook:
+        from_secret: slack_webhook_drone_alerts
+
+volumes:
+  - name: candidate-dockersock
+    temp: {}
+
+---
+
+kind: pipeline
+type: docker
+name: main-postgres
+
+trigger:
+  repo:
+    - kernel528/postgres-docker
+  branch:
+    - main
+  event:
+    - push
+
+steps:
   - name: slack-notification
     image: plugins/slack
     when:
@@ -39,46 +128,63 @@ steps:
 
 kind: pipeline
 type: docker
-name: main
+name: postgres-immutable-release
 
+# Release tags are manually created from reviewed main commits.
 trigger:
+  repo:
+    - kernel528/postgres-docker
   event:
-    - push
     - tag
-  branch:
-    - main
 
-# Build the docker image for the main branch & tagged release
+services:
+  - name: docker
+    image: docker:27.5.1-dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    volumes:
+      - name: release-dockersock
+        path: /var/run
+
 steps:
-  - name: main-docker-image-build
-    image: plugins/docker
-    when:
-      event:
-        - tag
-    settings:
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      repo: kernel528/postgres
-      tags:
-        - ${DRONE_TAG}
-        - latest
-
-  # Test docker image
-  - name: latest-docker-test
-    image: kernel528/postgres:latest
-    when:
-      branch:
-        - main
-      event:
-        - push
+  - name: build-and-smoke-release
+    image: docker:27.5.1-cli
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      POSTGRES_IMAGE_REPO: kernel528/postgres
+    volumes:
+      - name: release-dockersock
+        path: /var/run
     commands:
-      - cat /etc/alpine-release
-      - uname -a
-      - postgres --version
+      - scripts/ci-build-postgres-release.sh
 
-  # Slack notification
+  - name: check-immutable-tag-unused
+    image: docker:27.5.1-cli
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      POSTGRES_IMAGE_REPO: kernel528/postgres
+    volumes:
+      - name: release-dockersock
+        path: /var/run
+    commands:
+      - scripts/ci-check-postgres-release-tag-unused.sh
+
+  - name: publish-immutable-release
+    image: docker:27.5.1-cli
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      POSTGRES_IMAGE_REPO: kernel528/postgres
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_PASSWORD:
+        from_secret: docker_password
+    volumes:
+      - name: release-dockersock
+        path: /var/run
+    commands:
+      - scripts/ci-publish-postgres-release.sh
+
   - name: slack-notification
     image: plugins/slack
     when:
@@ -88,3 +194,7 @@ steps:
     settings:
       webhook:
         from_secret: slack_webhook_drone_alerts
+
+volumes:
+  - name: release-dockersock
+    temp: {}
