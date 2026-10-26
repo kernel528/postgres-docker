@@ -11,12 +11,12 @@ Based on: [Postgres Official Docker - Alpine](https://github.com/docker-library/
 
 ## Build
 ```
-docker image build -t kernel528/postgres:18.6.0-261022 -f Dockerfile .
+docker image build -t kernel528/postgres:18.6.0-261025 -f Dockerfile .
 ```
 
 ## Run
 ```
-docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.6.0-261022
+docker run -it -d -p 5432:5432 --name postgres-local -e POSTGRES_PASSWORD=password --hostname=postgres-local -d kernel528/postgres:18.6.0-261025
 ```
 
 ## Configuration
@@ -43,7 +43,7 @@ docker run -it -d \
   -e POSTGRES_PASSWORD=password \
   -v postgres-data:/var/lib/postgresql \
   -v "$(pwd)/sample-postgres-db.sql:/docker-entrypoint-initdb.d/01-sample.sql:ro" \
-  kernel528/postgres:18.6.0-261022
+  kernel528/postgres:18.6.0-261025
 ```
 
 ## Tagging
@@ -54,6 +54,14 @@ docker run -it -d \
 ## Repository Relationships and Refresh Policy
 
 This independent repository is coordinated by [`docker-workspace`](https://github.com/kernel528/docker-workspace), directly consumes [`kernel528/alpine`](https://github.com/kernel528/alpine-docker), and publishes images used by [`docker-swarm`](https://github.com/kernel528/docker-swarm). PostgreSQL has its own application-release cadence, but it must also be rebuilt when the shared Alpine base changes.
+
+## CI validation and release policy
+
+- Pull requests targeting `18` run rootless exact-image PostgreSQL checks, including a disposable-volume initialization, SQL write, clean shutdown, restart, and readback; the job publishes nothing.
+- Pushes to `18` build and smoke-test a fresh DIND candidate before a separate credentialed step publishes a unique build-number candidate tag.
+- Git tags from reviewed `main` use `18.6.0-YYMMDD`; the tag pipeline freshly builds and smoke-tests the immutable release before moving `18` and `latest`.
+- Candidate tags are not deployment inputs. The CI test volume is temporary; no Swarm volume or production data is changed.
+- This repository is public and trusted in Drone; add it to the isolated runner's exact repository allowlist only after pipeline review. Rootless PR jobs receive no registry credentials.
 
 Publish and verify the Alpine tag first. Build and validate PostgreSQL with a disposable volume, including initialization, write, clean shutdown, restart, and persistence checks. Publish an immutable PostgreSQL tag before updating `stacks/postgress-stack.yml`. Treat the NFS-backed Swarm rollout as a separate change with a confirmed backup and previous image tag available for rollback.
 
@@ -74,7 +82,7 @@ exit         # container
 ### From another host or container
 If you have `psql` installed locally, or run it from a separate container:
 ```
-docker container run -it --rm --name psql-client --hostname psql-client kernel528/postgres:18.6.0-261022 psql -h 192.168.1.110 -U postgres
+docker container run -it --rm --name psql-client --hostname psql-client kernel528/postgres:18.6.0-261025 psql -h 192.168.1.110 -U postgres
 <password>
 select VERSION();
 \q
