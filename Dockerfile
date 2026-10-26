@@ -1,4 +1,4 @@
-FROM kernel528/alpine:3.24.3_1
+FROM kernel528/alpine:3.24.3_3
 
 # Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.21/Dockerfile
 
@@ -31,10 +31,14 @@ RUN set -eux; \
 	\
 # verify the signature
 	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+	GOSU_KEY_FINGERPRINT='B42F6819007F00F88E364FD4036A9C25BF357DD4'; \
+	wget -O /usr/local/bin/gosu-key.asc "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${GOSU_KEY_FINGERPRINT}"; \
+	gpg --batch --import /usr/local/bin/gosu-key.asc; \
+	ACTUAL_GOSU_KEY_FINGERPRINT="$(gpg --batch --with-colons --fingerprint "$GOSU_KEY_FINGERPRINT" | awk -F: '$1 == "fpr" { print $10; exit }')"; \
+	[ "$ACTUAL_GOSU_KEY_FINGERPRINT" = "$GOSU_KEY_FINGERPRINT" ]; \
 	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
 	gpgconf --kill all; \
-	rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
+	rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc /usr/local/bin/gosu-key.asc; \
 	\
 # clean up fetch dependencies
 	apk del --no-network .gosu-deps; \
