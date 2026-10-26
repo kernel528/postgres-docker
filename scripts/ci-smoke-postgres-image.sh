@@ -6,6 +6,7 @@ expected_alpine=${2:?Usage: ci-smoke-postgres-image.sh <image-id> <alpine-releas
 expected_postgres=${3:?Usage: ci-smoke-postgres-image.sh <image-id> <alpine-release> <postgres-version>}
 smoke_id="postgres-smoke-$$"
 smoke_volume="postgres-smoke-$$"
+smoke_password=$(od -An -N16 -tx1 /dev/urandom | tr -d '[:space:]')
 container_id=""
 volume_created=0
 
@@ -37,7 +38,7 @@ esac
 docker volume create "$smoke_volume" >/dev/null
 volume_created=1
 container_id=$(docker container create --name "$smoke_id" --volume "$smoke_volume:/var/lib/postgresql" \
-  --env POSTGRES_PASSWORD=ci-smoke-only "$image_id")
+  --env "POSTGRES_PASSWORD=$smoke_password" "$image_id")
 docker container start "$container_id" >/dev/null
 
 attempt=0
@@ -58,7 +59,7 @@ docker container rm "$container_id" >/dev/null
 container_id=""
 
 container_id=$(docker container create --name "$smoke_id" --volume "$smoke_volume:/var/lib/postgresql" \
-  --env POSTGRES_PASSWORD=ci-smoke-only "$image_id")
+  --env "POSTGRES_PASSWORD=$smoke_password" "$image_id")
 docker container start "$container_id" >/dev/null
 attempt=0
 until docker container exec "$container_id" pg_isready --username=postgres --dbname=postgres >/dev/null 2>&1; do
