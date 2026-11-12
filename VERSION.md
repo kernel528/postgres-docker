@@ -33,3 +33,4 @@ Notes:
 - 18.6.0-260907: Updated to Postgres 18.6 on kernel528/alpine:3.24.1_1.
 - 18.6.0-261022: Rebuilt Postgres 18.6 on kernel528/alpine:3.24.3_1.
 - 18.6.0-261025: Rebuilt Postgres 18.6 on kernel528/alpine:3.24.3_3.
+- 18.6.0-261110: Rebuilt Postgres 18.6 on kernel528/alpine:3.24.4_1.
