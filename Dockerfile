@@ -1,4 +1,4 @@
-FROM kernel528/alpine:3.24.4_1
+FROM kernel528/alpine:4.0.0
 
 # Based on: https://github.com/docker-library/postgres/blob/master/16/alpine3.21/Dockerfile
 
